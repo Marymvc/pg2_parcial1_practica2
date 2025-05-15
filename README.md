@@ -1,64 +1,158 @@
-# pg2_parcial_p2
-# CineProject
+# 📝 Parcial 1 - Programación II
 
-Proyecto web desarrollado con Django para gestionar y mostrar información sobre películas.
+**Nombre:** Mary Magali  
+**Curso:** Técnico en Sistemas Informáticos  
+**Materia:** Programación II  
+**Fecha:** Mayo 2025
 
-## Descripción
+---
 
-Este proyecto es una aplicación básica en Django que tiene una página principal que muestra un mensaje de bienvenida. Es una base para agregar funcionalidades relacionadas con películas.
+## 🎬 Proyecto Django: Cine
 
-## Requisitos
+Este repositorio contiene un proyecto básico en Django para gestionar información sobre **películas** y **directores**. El sistema incluye modelos, panel de administración y un ejemplo cargado.
 
-- Python 3.8+
-- Django 5.2.1 (u otra versión compatible)
+Repositorio: [pg2_parcial1_p2](https://github.com/Marymvc/pg2_parcial1_p2)
 
-## Instalación
+---
 
-1. Clona este repositorio o descarga el proyecto.
+## ⚙️ Requisitos Técnicos
 
-2. Crea y activa un entorno virtual:
+### 1. Crear entorno virtual
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # En Linux/macOS
-venv\Scripts\activate      # En Windows PowerShell
-Instala las dependencias:
+```
 
-bash
-pip install django
-Configuración
-Asegúrate de que tu archivo cineproject/urls.py incluya la ruta a la aplicación peliculas:
+### 2. Activar entorno virtual
 
-python
+#### En Windows
+
+```bash
+.env\ScriptsActivate
+```
+
+#### En Linux / Mac
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+> Si no existe el archivo, podés crearlo con:
+
+```bash
+pip freeze > requirements.txt
+```
+
+---
+
+### 4. Crear proyecto y aplicación
+
+```bash
+django-admin startproject cineproject
+cd cineproject
+python manage.py startapp cine
+```
+
+---
+
+### 5. Configurar aplicación en `settings.py`
+
+```python
+# cineproject/settings.py
+
+INSTALLED_APPS = [
+    ...
+    'cine',
+]
+```
+
+---
+
+## 🧱 Modelos
+
+### cine/models.py
+
+```python
+from django.db import models
+
+class Director(models.Model):
+    nombre = models.CharField(max_length=100)
+    nacionalidad = models.CharField(max_length=100)
+    fecha_nacimiento = models.DateField()
+
+    def __str__(self):
+        return self.nombre
+
+class Pelicula(models.Model):
+    titulo = models.CharField(max_length=100)
+    anio_estreno = models.IntegerField()
+    director = models.ForeignKey(Director, on_delete=models.CASCADE, related_name="peliculas")
+
+    def __str__(self):
+        return self.titulo
+```
+
+---
+
+## 🔧 Migraciones
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+## 🛡️ Panel de administración
+
+### cine/admin.py
+
+```python
 from django.contrib import admin
-from django.urls import path, include
+from .models import Director, Pelicula
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('peliculas.urls')),  # Incluye urls de la app peliculas
-]
-En peliculas/urls.py define la ruta para la vista principal:
+admin.site.register(Director)
+admin.site.register(Pelicula)
+```
 
-python
-from django.urls import path
-from . import views
+---
 
-urlpatterns = [
-    path('', views.home, name='home'),
-]
-En peliculas/views.py tienes la vista:
+## 👤 Crear superusuario
 
-python
-from django.http import HttpResponse
+```bash
+python manage.py createsuperuser
+```
 
-def home(request):
-    return HttpResponse("¡Hola! Esta es la página principal de Películas.")
-Ejecución
-Para iniciar el servidor de desarrollo:
+---
 
-bash
+## 🚀 Iniciar servidor
+
+```bash
 python manage.py runserver
-Luego abre en tu navegador:
+```
 
-cpp
-http://127.0.0.1:8000/
+---
+
+## 📸 Capturas
+
+Dentro del repositorio hay una carpeta `capturas/` con imágenes del panel de administración funcionando, donde se puede visualizar la gestión de películas y directores.
+
+---
+
+## 🔄 Subir cambios a GitHub
+
+```bash
+git add .
+git commit -m "Primer commit - Proyecto Cine Django"
+git push -u origin main  # o master si es tu rama principal
+```
+
+---
